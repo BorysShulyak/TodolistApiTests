@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "bf9bd947-84c3-402e-8e56-34a7d3f9ae09",
+		"name": "LoginUser",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User registration",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user).to.not.eql(null);",
+							"    pm.expect(token).to.not.eql(null);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{userId}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\",\n    \"age\": 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user).to.not.eql(null);",
+							"    pm.expect(token).to.not.eql(null);",
+							"});",
+							"",
+							"pm.test(\"Response body contains negative meassage\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user.name).to.eql(pm.environment.replaceIn(\"{{userId}}\"));",
+							"    pm.expect(user.email).to.eql(pm.environment.replaceIn(\"{{email}}\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/login",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

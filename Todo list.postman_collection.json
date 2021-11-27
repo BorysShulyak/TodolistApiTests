@@ -1,0 +1,304 @@
+{
+	"info": {
+		"_postman_id": "3505673c-123b-4fdb-aae1-9c9a73703753",
+		"name": "Todo list",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User registration",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user).to.not.eql(null);",
+							"    pm.expect(token).to.not.eql(null);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{userId}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\",\n    \"age\": 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user).to.not.eql(null);",
+							"    pm.expect(token).to.not.eql(null);",
+							"    pm.environment.set(\"token\", token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/login",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add task",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const taskDescription = \"ds\" + Date.now();",
+							"pm.environment.set(\"taskDescription\", taskDescription);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const success = jsonData.success;",
+							"    const data = jsonData.data;",
+							"    pm.expect(success).to.not.eql(null);",
+							"    pm.expect(data).to.not.eql(null);",
+							"    pm.expect(data.description).to.not.eql(null);",
+							"    pm.expect(data.completed).to.not.eql(null);",
+							"});",
+							"",
+							"pm.test(\"Fields values are correct\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const success = jsonData.success;",
+							"    const data = jsonData.data;",
+							"    pm.expect(success).to.eql(true);",
+							"    pm.expect(data.description).to.eql(pm.environment.replaceIn(\"{{taskDescription}}\"));",
+							"    pm.expect(data.completed).to.eql(false)",
+							"    pm.environment.set(\"taskId\", data._id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"{{taskDescription}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/task",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const success = jsonData.success;",
+							"    const data = jsonData.data;",
+							"    pm.expect(success).to.not.eql(null);",
+							"    pm.expect(data).to.not.eql(null);",
+							"    pm.expect(data.description).to.not.eql(null);",
+							"    pm.expect(data.completed).to.not.eql(null);",
+							"});",
+							"",
+							"pm.test(\"Fields values are correct\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const success = jsonData.success;",
+							"    const data = jsonData.data;",
+							"    pm.expect(success).to.eql(true);",
+							"    pm.expect(data.description).to.eql(pm.environment.replaceIn(\"{{taskDescription}}\"));",
+							"    pm.expect(data.completed).to.eql(false)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/task/{{taskId}}",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"task",
+						"{{taskId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

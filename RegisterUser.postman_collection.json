@@ -1,0 +1,360 @@
+{
+	"info": {
+		"_postman_id": "846051e1-9bba-4413-bca5-3edd670d31a7",
+		"name": "RegisterUser",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "negative - name empty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response body contains negative meassage\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(\"User validation failed: name: Path `name` is required.\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"\",\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\",\n    \"age\": 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "negative - email empty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response body contains negative meassage\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(\"User validation failed: email: Path `email` is required.\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{userId}}\",\n    \"email\": \"\",\n    \"password\": \"12345678\",\n    \"age\": 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "negative - password empty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response body contains negative meassage\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(\"User validation failed: password: Path `password` is required.\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{userId}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"\",\n    \"age\": 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "success - absent age",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user).to.not.eql(null);",
+							"    pm.expect(token).to.not.eql(null);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{userId}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "seccessfull",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userId = \"bs\" + Date.now();",
+							"pm.environment.set(\"userId\", userId);",
+							"",
+							"const email = userId + \"@test.com\";",
+							"pm.environment.set(\"email\", email);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Correct body\", function() {",
+							"    pm.response.to.have.jsonBody() ",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Fields in the response exist\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user).to.not.eql(null);",
+							"    pm.expect(token).to.not.eql(null);",
+							"});",
+							"",
+							"pm.test(\"Fields values are correct\", function() {",
+							"    let jsonData = pm.response.json();",
+							"    const user = jsonData.user;",
+							"    const token = jsonData.token;",
+							"    pm.expect(user.name).to.eql(pm.environment.replaceIn(\"{{userId}}\"));",
+							"    pm.expect(user.email).to.eql(pm.environment.replaceIn(\"{{email}}\"));",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{userId}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-nodejs-todolist.herokuapp.com/user/register",
+					"protocol": "https",
+					"host": [
+						"api-nodejs-todolist",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
